@@ -1,0 +1,610 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AegisDroid // Plateforme d'Investigation Forensique Android</title>
+  <!-- Main Stylesheet -->
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+  <!-- 1. SIDEBAR NAVIGATION -->
+  <div class="sidebar">
+    <div class="logo-container">
+      <div class="logo-icon">Æ</div>
+      <div class="logo-text">
+        <h1>AegisDroid</h1>
+        <span>Forensic Platform</span>
+      </div>
+    </div>
+    
+    <ul class="nav-links">
+      <li class="active" data-target="dashboard-panel">
+        <a href="#dashboard">
+          <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v4a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v4a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v4a2 2 0 01-2 2H6a2 2 0 01-2-2v-4zM14 16a2 2 0 012-2h2a2 2 0 012 2v4a2 2 0 01-2 2h-2a2 2 0 01-2-2v-4z"></path></svg>
+          Dashboard Central
+        </a>
+      </li>
+      <li data-target="acquisition-panel">
+        <a href="#acquisition">
+          <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 9l3 3-3 3m5 0h3M5 20h14a2 2 0 002-2V6a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
+          Console Acquisition (ADB)
+        </a>
+      </li>
+      <li data-target="analyzer-panel">
+        <a href="#analyzer">
+          <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 7v10c0 2.21 3.58 4 8 4s8-1.79 8-4V7M4 7c0 2.21 3.58 4 8 4s8-1.79 8-4M4 7c0-2.21 3.58-4 8-4s8 1.79 8 4m0 5c0 2.21-3.58 4-8 4s-8-1.79-8-4"></path></svg>
+          Analyseur de Bases (SQLite)
+        </a>
+      </li>
+      <li data-target="timeline-panel">
+        <a href="#timeline">
+          <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+          Timeline d'Événements
+        </a>
+      </li>
+      <li data-target="malware-panel">
+        <a href="#malware">
+          <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg>
+          Auditeur de Menaces
+        </a>
+      </li>
+      <li data-target="report-panel">
+        <a href="#report">
+          <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
+          Générateur de Rapport
+        </a>
+      </li>
+      <li data-target="handbook-panel">
+        <a href="#handbook">
+          <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path></svg>
+          Manuel Forensique
+        </a>
+      </li>
+    </ul>
+    
+    <div class="sidebar-footer">
+      AegisDroid Forensic Suite v1.0.0<br>© 2026 Mobile DFIR Toolkit
+    </div>
+  </div>
+
+  <!-- 2. MAIN WORKSPACE CONTAINER -->
+  <div class="main-workspace">
+    
+    <!-- TOP STATUS HEADER -->
+    <div class="top-status-header">
+      <div class="device-status-badge">
+        <div class="status-dot" id="device-dot"></div>
+        <div>
+          <span style="font-size: 0.8rem; text-transform: uppercase; color: var(--text-muted); font-weight: 600; letter-spacing: 0.05em; display: block;">Téléphone Cible</span>
+          <span id="target-device-name" style="font-size: 0.95rem; font-weight: 700; color: var(--text-primary);">Google Pixel 6 Pro</span>
+        </div>
+      </div>
+      
+      <div class="device-info-pills">
+        <div class="pill">ADB: <span class="highlight" id="pill-adb-status">ACTIF</span></div>
+        <div class="pill">API: <span class="highlight" id="pill-api-level">31 (Android 12)</span></div>
+        <div class="pill risk-high" id="pill-root-status">ROOT: OUI</div>
+      </div>
+      
+      <div class="case-selector-container">
+        <span style="font-size: 0.8rem; color: var(--text-secondary); font-weight: 500;">Étude de cas :</span>
+        <div class="select-wrapper">
+          <select id="case-select">
+            <!-- Dynamically populated -->
+          </select>
+        </div>
+      </div>
+    </div>
+
+    <!-- CONTENT COMPARTMENT -->
+    <div class="content-compartment">
+      
+      <!-- ==========================================
+           A. PANEL: DASHBOARD CENTRAL
+           ========================================== -->
+      <div id="dashboard-panel" class="section-panel active">
+        <div class="section-header">
+          <div class="section-title">
+            <h2>Dashboard Central</h2>
+            <p>Résumé des indices de compromission (IOCs) découverts sur le smartphone.</p>
+          </div>
+        </div>
+        
+        <div class="forensic-grid">
+          <!-- Widget: Risk Level -->
+          <div class="forensic-card col-4 stat-widget">
+            <div class="stat-info">
+              <h3>Score de Risque Global</h3>
+              <p style="font-size: 0.9rem; color: var(--text-secondary); margin-top: 4px; line-height: 1.4;" id="risk-score-text">Activité suspecte détectée dans les fichiers système et sockets.</p>
+            </div>
+            <div class="widget-risk-gauge">
+              <div class="risk-circle-wrap">
+                <svg class="risk-circle-svg">
+                  <circle class="risk-circle-bg" cx="70" cy="70" r="65"></circle>
+                  <circle class="risk-circle-fill" id="risk-circle" cx="70" cy="70" r="65"></circle>
+                </svg>
+                <div class="risk-circle-val">
+                  <span id="risk-value">94%</span>
+                  <span class="label">CRITIQUE</span>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <!-- Widget: Total IOCs -->
+          <div class="forensic-card col-4 stat-widget">
+            <div class="stat-info">
+              <h3>Éléments Analysés</h3>
+              <p style="font-size: 1.85rem; font-weight: 700; color: var(--color-primary);" id="total-artifacts-count">0</p>
+              <p style="font-size: 0.8rem; color: var(--text-muted); margin-top: 4px;">Fichiers, DBs, et sockets extraits</p>
+            </div>
+            <div class="stat-icon">
+              <svg fill="none" stroke="currentColor" width="24" height="24" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01"></path></svg>
+            </div>
+          </div>
+          
+          <!-- Widget: Tagged Evidence -->
+          <div class="forensic-card col-4 stat-widget">
+            <div class="stat-info">
+              <h3>Indices Marqués</h3>
+              <p style="font-size: 1.85rem; font-weight: 700; color: var(--color-success);" id="tagged-evidence-count">0</p>
+              <p style="font-size: 0.8rem; color: var(--text-muted); margin-top: 4px;">Retenus pour le rapport d'investigation</p>
+            </div>
+            <div class="stat-icon">
+              <svg fill="none" stroke="currentColor" width="24" height="24" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z"></path></svg>
+            </div>
+          </div>
+          
+          <!-- Case Description -->
+          <div class="forensic-card col-8">
+            <h3 style="font-size: 1.1rem; font-weight: 600; margin-bottom: 12px; display: flex; align-items: center; gap: 8px;">
+              <span style="display:inline-block; width:8px; height:8px; background-color: var(--color-primary); border-radius:50%;"></span>
+              Description du Cas d'Investigation
+            </h3>
+            <p style="color: var(--text-secondary); font-size: 0.95rem; line-height: 1.6; margin-bottom: 16px;" id="case-description">
+              Sélectionnez un cas dans le menu en haut à droite pour charger ses données.
+            </p>
+            
+            <h4 style="font-size: 0.85rem; color: var(--text-muted); text-transform: uppercase; margin-bottom: 8px; font-weight: 600; letter-spacing: 0.05em;">Intégrité Forensique de la Copie</h4>
+            <div style="background-color: rgba(0,0,0,0.2); padding: 12px; border-radius: 6px; border: 1px solid var(--border-color); font-family: var(--font-mono); font-size: 0.75rem; word-break: break-all; color: var(--text-secondary); display: flex; align-items: center; justify-content: space-between;">
+              <div>
+                <span style="color: var(--color-success); font-weight: 700; margin-right: 8px;">SHA-256</span>
+                <span id="case-hash-value">Calcul en cours...</span>
+              </div>
+              <span style="font-size: 0.65rem; background-color: rgba(16, 185, 129, 0.15); color: var(--color-success); padding: 2px 6px; border-radius: 4px; font-weight: 600;">VÉRIFIÉ</span>
+            </div>
+          </div>
+          
+          <!-- MITRE ATT&CK Mapping Grid -->
+          <div class="forensic-card col-4">
+            <h3 style="font-size: 1.1rem; font-weight: 600; margin-bottom: 16px; display: flex; align-items: center; gap: 8px;">
+              <span style="display:inline-block; width:8px; height:8px; background-color: var(--color-danger); border-radius:50%;"></span>
+              Mappage MITRE ATT&CK
+            </h3>
+            
+            <div class="mitre-badge-list" id="mitre-mapping-list">
+              <!-- Dynamically populated -->
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <!-- ==========================================
+           B. PANEL: ACQUISITION CONSOLE (ADB)
+           ========================================== -->
+      <div id="acquisition-panel" class="section-panel">
+        <div class="section-header">
+          <div class="section-title">
+            <h2>Console d'Acquisition & Contrôle ADB</h2>
+            <p>Simulateur de terminal interactif Android Debug Bridge (ADB) pour l'extraction de données système.</p>
+          </div>
+        </div>
+        
+        <div class="forensic-grid">
+          <!-- Terminal Panel -->
+          <div class="forensic-card col-8 terminal-window">
+            <div class="terminal-header">
+              <div class="terminal-controls">
+                <span class="control-dot red"></span>
+                <span class="control-dot yellow"></span>
+                <span class="control-dot green"></span>
+              </div>
+              <div class="terminal-title">WORKSTATION@FORENSIC-LAB: ~/adb_shell</div>
+              <div></div>
+            </div>
+            
+            <div class="terminal-body" id="terminal-screen">
+              <div class="terminal-line output">=== AEGISDROID MOBILE FORENSICS TERMINAL INTERFACE ===</div>
+              <div class="terminal-line output">[*] Tapez une commande ci-dessous ou cliquez sur un raccourci de script rapide.</div>
+              <div class="terminal-line output">[*] Tapez 'help' pour lister les commandes forensiques essentielles.</div>
+              <div class="terminal-line output"></div>
+            </div>
+            
+            <div class="terminal-input-container">
+              <span class="terminal-prompt">adb shell</span>
+              <input type="text" class="terminal-input-box" id="terminal-input" placeholder="getprop | pm list packages | ps -A..." autocomplete="off">
+            </div>
+          </div>
+          
+          <!-- Presets and Guides -->
+          <div class="forensic-card col-4">
+            <h3 style="font-size: 1.1rem; font-weight: 600; margin-bottom: 16px;">Raccourcis Forensiques</h3>
+            <p style="color: var(--text-secondary); font-size: 0.85rem; line-height: 1.5; margin-bottom: 16px;">
+              Déclenchez directement des requêtes sur l'appareil pour observer les sorties en direct dans le terminal :
+            </p>
+            
+            <div class="terminal-presets">
+              <button class="btn-preset" data-cmd="adb devices">adb devices</button>
+              <button class="btn-preset" data-cmd="adb shell getprop">adb shell getprop</button>
+              <button class="btn-preset" data-cmd="adb shell pm list packages">adb shell pm list packages</button>
+              <button class="btn-preset" data-cmd="adb shell ps -A">adb shell ps -A</button>
+              <button class="btn-preset" data-cmd="adb shell netstat -antp">adb shell netstat -antp</button>
+              <button class="btn-preset" data-cmd="adb pull /data/system/packages.list">adb pull packages.list</button>
+              <button class="btn-preset" data-cmd="adb backup -all">adb backup (Logical)</button>
+              <button class="btn-preset" data-cmd="clear">Effacer la console</button>
+            </div>
+            
+            <hr style="border: none; border-top: 1px solid var(--border-color); margin: 20px 0;">
+            
+            <h3 style="font-size: 1.05rem; font-weight: 600; margin-bottom: 12px;">Script d'Acquisition Réel</h3>
+            <p style="color: var(--text-secondary); font-size: 0.85rem; line-height: 1.5; margin-bottom: 16px;">
+              Téléchargez nos scripts automatisés d'acquisition logique et de hashage intègre (SHA-256) pour les exécuter sur vos propres machines cibles.
+            </p>
+            
+            <div style="display: flex; gap: 8px;">
+              <a href="scripts/adb_acquire.ps1" download class="btn-primary" style="font-size: 0.75rem; padding: 8px 12px; text-decoration: none;">
+                <svg fill="none" stroke="currentColor" width="16" height="16" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
+                Script PowerShell
+              </a>
+              <a href="scripts/adb_acquire.sh" download class="btn-outline" style="font-size: 0.75rem; padding: 8px 12px; text-decoration: none;">
+                Script Bash (Linux)
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <!-- ==========================================
+           C. PANEL: SQLITE ANALYZER
+           ========================================== -->
+      <div id="analyzer-panel" class="section-panel">
+        <div class="section-header">
+          <div class="section-title">
+            <h2>Analyseur de Bases de Données (SQLite)</h2>
+            <p>Interrogez les bases de données d'appels, messages ou navigateurs. Marquez les lignes suspectes comme preuves.</p>
+          </div>
+        </div>
+        
+        <div class="forensic-grid">
+          
+          <!-- Category Tabs -->
+          <div class="forensic-card col-3 analyzer-sidebar">
+            <h3 style="font-size: 0.85rem; text-transform: uppercase; color: var(--text-muted); letter-spacing: 0.05em; margin-bottom: 16px; font-weight: 700;">Tables Système Android</h3>
+            <ul class="analyzer-tabs">
+              <li class="active" data-db="sms"><button>
+                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"></path></svg>
+                SMS & Messages (mmssms.db)
+              </button></li>
+              <li data-db="calls"><button>
+                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.94.725l.548 2.2a1 1 0 01-.321.988l-1.305.98a10.582 10.582 0 004.872 4.872l.98-1.305a1 1 0 01.988-.321l2.2.548a1 1 0 01.725.94V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"></path></svg>
+                Historique d'Appels (contacts2.db)
+              </button></li>
+              <li data-db="browser"><button>
+                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.657-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.657-9 3-9m-9 9a9 9 0 019-9"></path></svg>
+                Historique Web (Chrome History)
+              </button></li>
+            </ul>
+            
+            <hr style="border: none; border-top: 1px solid var(--border-color); margin: 20px 0;">
+            
+            <h3 style="font-size: 0.85rem; text-transform: uppercase; color: var(--text-muted); letter-spacing: 0.05em; margin-bottom: 16px; font-weight: 700;">Téléverser sa propre DB</h3>
+            
+            <!-- File Drag & Drop -->
+            <div class="uploader-box" id="drop-zone">
+              <div class="uploader-icon">⎗</div>
+              <h4 style="font-size: 0.8rem; font-weight: 600; margin-bottom: 4px;">Glisser-Déposer une DB</h4>
+              <p style="font-size: 0.65rem; color: var(--text-muted);">Format SQLite (.db, .sqlite)</p>
+              <input type="file" id="file-input" style="display: none;" accept=".db,.sqlite">
+            </div>
+            
+          </div>
+          
+          <!-- SQL Console & Data Table Output -->
+          <div class="col-9" style="display: flex; flex-direction: column; gap: 24px;">
+            
+            <!-- Interactive SQL Editor Console -->
+            <div class="sql-console">
+              <div class="sql-editor-header">
+                <span>CONSTRUCTEUR DE REQUÊTES SQL INTERACTIF</span>
+                <span id="active-db-label">Fichier actif: mmssms.db</span>
+              </div>
+              <textarea class="sql-textarea" id="sql-query-editor">SELECT * FROM sms ORDER BY date DESC;</textarea>
+              <div style="padding: 10px 16px; background-color: rgba(0, 0, 0, 0.2); border-top: 1px solid var(--border-color); display: flex; justify-content: space-between; align-items: center;">
+                <span style="font-size: 0.75rem; color: var(--text-secondary);">Tables disponibles: <span style="font-family: var(--font-mono); color: var(--color-primary);" id="avail-tables-hint">sms, pdus, parts</span></span>
+                <button class="btn-primary" style="font-size: 0.8rem; padding: 6px 16px;" id="btn-run-query">
+                  Exécuter [F5]
+                </button>
+              </div>
+            </div>
+            
+            <!-- Data Grid Output -->
+            <div class="forensic-card" style="padding: 0; overflow: hidden; flex-grow: 1;">
+              <div style="padding: 16px; border-bottom: 1px solid var(--border-color); background-color: rgba(255,255,255,0.01); display: flex; justify-content: space-between; align-items: center;">
+                <h4 style="font-size: 0.9rem; font-weight: 600;" id="table-results-title">Résultats de la base: SMS</h4>
+                <div style="font-size: 0.75rem; color: var(--text-secondary);" id="row-count-indicator">0 lignes renvoyées</div>
+              </div>
+              
+              <div class="table-panel" style="border: none; border-radius: 0; max-height: 400px; overflow-y: auto;">
+                <table class="forensic-table" id="db-results-table">
+                  <!-- Dynamically generated headers and rows -->
+                </table>
+              </div>
+            </div>
+            
+          </div>
+          
+        </div>
+      </div>
+      
+      <!-- ==========================================
+           D. PANEL: UNIFIED TIMELINE
+           ========================================== -->
+      <div id="timeline-panel" class="section-panel">
+        <div class="section-header">
+          <div class="section-title">
+            <h2>Timeline Chronologique Unified</h2>
+            <p>Trace chronologique agrégée de toutes les transactions SMS, historique Web et installations d'apps.</p>
+          </div>
+          <div style="display: flex; gap: 8px;">
+            <button class="btn-outline filter-timeline-btn active" data-severity="all" style="font-size: 0.75rem; padding: 6px 12px;">Tout</button>
+            <button class="btn-outline filter-timeline-btn" data-severity="high" style="font-size: 0.75rem; padding: 6px 12px; border-color: rgba(244,63,94,0.3); color: var(--color-danger);">Critique/IOCs</button>
+            <button class="btn-outline filter-timeline-btn" data-severity="medium" style="font-size: 0.75rem; padding: 6px 12px; border-color: rgba(245,158,11,0.3); color: var(--color-warning);">Suspect</button>
+          </div>
+        </div>
+        
+        <div class="forensic-card">
+          <div class="timeline-stream" id="timeline-container">
+            <!-- Dynamically populated -->
+          </div>
+        </div>
+      </div>
+      
+      <!-- ==========================================
+           E. PANEL: THREAT AUDITOR
+           ========================================== -->
+      <div id="malware-panel" class="section-panel">
+        <div class="section-header">
+          <div class="section-title">
+            <h2>Auditeur de Menaces & Sécurité</h2>
+            <p>Analyse d'intégrité des applications installées, permissions à haut risque et sockets actifs.</p>
+          </div>
+        </div>
+        
+        <div class="forensic-grid">
+          <!-- Apps scanner listing -->
+          <div class="forensic-card col-6" style="display: flex; flex-direction: column;">
+            <div class="auditor-title-wrap">
+              <h3 style="font-size: 1.1rem; font-weight: 600;">Applications & Paquets Audités</h3>
+              <span style="font-size: 0.75rem; background-color: rgba(244,63,94,0.1); color: var(--color-danger); border: 1px solid rgba(244,63,94,0.2); padding: 2px 8px; border-radius: 4px; font-weight:600;" id="suspicious-packages-count">1 Paquet Suspect</span>
+            </div>
+            
+            <div style="flex-grow: 1; display:flex; flex-direction:column; gap:16px; overflow-y:auto; max-height: 500px;" id="apps-audited-list">
+              <!-- Dynamically populated -->
+            </div>
+          </div>
+          
+          <!-- Dangerous permissions breakdown -->
+          <div class="forensic-card col-6">
+            <h3 style="font-size: 1.1rem; font-weight: 600; margin-bottom: 16px;">Matrice de Permissions Abusées</h3>
+            <p style="color: var(--text-secondary); font-size: 0.85rem; line-height: 1.5; margin-bottom: 20px;">
+              Examen détaillé des permissions système déclarées et exploitées par le paquet suspect pour capter et exfiltrer les données :
+            </p>
+            
+            <div class="permissions-matrix" id="permissions-matrix-container">
+              <!-- Dynamically populated -->
+            </div>
+          </div>
+          
+          <!-- Network Sockets and C2 tracking -->
+          <div class="forensic-card col-12">
+            <h3 style="font-size: 1.1rem; font-weight: 600; margin-bottom: 16px;">Tunnels Réseau Actifs (Sockets)</h3>
+            <p style="color: var(--text-secondary); font-size: 0.85rem; line-height: 1.5; margin-bottom: 16px;">
+              Audit des sockets réseau ouverts en tâche de fond. Indique les flux d'exfiltration vers des IPs de Command & Control (C2) ou des noeuds de rebond Tor.
+            </p>
+            
+            <div class="table-panel">
+              <table class="forensic-table" id="sockets-table">
+                <thead>
+                  <tr>
+                    <th>LOCAL IP:PORT</th>
+                    <th>FOREIGN IP:PORT</th>
+                    <th>ÉTAT</th>
+                    <th>PROCESSUS ÉMETTEUR (PID)</th>
+                    <th>FORENSIC TAG / ALERTE</th>
+                    <th>ACTIONS</th>
+                  </tr>
+                </thead>
+                <tbody id="sockets-table-body">
+                  <!-- Dynamically populated -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <!-- ==========================================
+           F. PANEL: REPORT BUILDER & VIEW
+           ========================================== -->
+      <div id="report-panel" class="section-panel">
+        <!-- Print Header (Hidden on screen, active when printing) -->
+        
+        <div class="section-header">
+          <div class="section-title">
+            <h2>Générateur de Rapport d'Investigation</h2>
+            <p>Structurez votre dossier, assemblez les pièces à conviction recueillies et exportez le livrable forensique.</p>
+          </div>
+          <div style="display: flex; gap: 10px;">
+            <button class="btn-outline" onclick="window.print()">
+              <svg fill="none" stroke="currentColor" width="16" height="16" viewBox="0 0 24 24" style="margin-right: 6px; display:inline; vertical-align: middle;"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"></path></svg>
+              Imprimer / PDF
+            </button>
+            <button class="btn-primary" id="btn-copy-report">Copier le Rapport</button>
+          </div>
+        </div>
+        
+        <div class="forensic-grid">
+          <!-- Form parameters -->
+          <div class="forensic-card col-4">
+            <h3 style="font-size: 1.1rem; font-weight: 600; margin-bottom: 16px;">Méta-Données du Dossier</h3>
+            
+            <div class="form-group">
+              <label>Identifiant du Cas</label>
+              <input type="text" class="form-input" id="report-case-id" value="CASE-2026-A103">
+            </div>
+            
+            <div class="form-group">
+              <label>Investigateur Responsable</label>
+              <input type="text" class="form-input" id="report-examiner" value="Commandant R. de la Garde">
+            </div>
+            
+            <div class="form-group">
+              <label>Service / Entreprise</label>
+              <input type="text" class="form-input" id="report-agency" value="Service d'Investigation Numérique & Réponse aux Incidents">
+            </div>
+            
+            <div class="form-group">
+              <label>Notes Synthétiques de l'Analyse</label>
+              <textarea class="form-input" id="report-executive-summary" style="height: 140px; resize: none; font-size: 0.85rem; line-height: 1.5;">L'analyse forensique du téléphone a mis en évidence une compromission système active. L'infection s'est produite suite au téléchargement et à l'exécution volontaire d'un APK malicieux usurpant l'identité d'un service légitime. Les connexions actives vers des IPs suspectes confirment l'exfiltration de données.</textarea>
+            </div>
+          </div>
+          
+          <!-- Final preview layout -->
+          <div class="forensic-card col-8" style="background-color: #0b0f19; border-color: rgba(6,182,212,0.3);" id="forensic-printable-area">
+            
+            <!-- Report Title -->
+            <div style="border-bottom: 2px solid var(--color-primary); padding-bottom: 16px; margin-bottom: 24px; text-align: center;">
+              <h2 style="font-size: 1.5rem; font-weight: 800; letter-spacing: 0.05em; text-transform: uppercase;">RAPPORT D'INVESTIGATION NUMÉRIQUE</h2>
+              <span style="font-size: 0.75rem; font-family: var(--font-mono); color: var(--text-secondary); margin-top: 4px; display: block;">ANDROIDSLEUTH FORENSIC REPORT // SECURE AUDIT INVENTORY</span>
+            </div>
+            
+            <!-- Metadata print Grid -->
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 24px; font-size: 0.85rem; line-height: 1.6; border-bottom: 1px solid var(--border-color); padding-bottom: 16px;">
+              <div>
+                <strong style="color: var(--text-secondary);">CASE ID:</strong> <span id="print-case-id" style="font-family: var(--font-mono); font-weight:600; color:var(--color-primary);">CASE-2026-A103</span><br>
+                <strong style="color: var(--text-secondary);">INVESTIGATEUR:</strong> <span id="print-examiner">Commandant R. de la Garde</span><br>
+                <strong style="color: var(--text-secondary);">ORGANISATION:</strong> <span id="print-agency">Service d'Investigation Numérique</span>
+              </div>
+              <div style="text-align: right;">
+                <strong style="color: var(--text-secondary);">APPAREIL EXTRAIT:</strong> <span id="print-device">Google Pixel 6 Pro</span><br>
+                <strong style="color: var(--text-secondary);">DATE FORENSIQUE:</strong> <span id="print-date" style="font-family: var(--font-mono);">2026-05-25 12:00:00 UTC</span><br>
+                <strong style="color: var(--text-secondary);">HASH DE LA SOURCE (SHA-256):</strong><br>
+                <span id="print-hash" style="font-family: var(--font-mono); font-size: 0.65rem; color: var(--text-secondary); word-break: break-all;">-</span>
+              </div>
+            </div>
+            
+            <!-- Summary -->
+            <div style="margin-bottom: 24px;">
+              <h3 style="font-size: 0.95rem; text-transform: uppercase; color: var(--color-primary); font-weight: 700; margin-bottom: 8px;">1. Synthèse Exécutive</h3>
+              <p style="font-size: 0.85rem; line-height: 1.6; color: var(--text-secondary); text-align: justify;" id="print-summary-text">
+                -
+              </p>
+            </div>
+            
+            <!-- Evidence list collected -->
+            <div style="margin-bottom: 24px;">
+              <h3 style="font-size: 0.95rem; text-transform: uppercase; color: var(--color-primary); font-weight: 700; margin-bottom: 12px;">2. Pièces à Conviction Retenues (Evidence Inventory)</h3>
+              
+              <div id="print-evidence-list" style="display:flex; flex-direction:column; gap:12px;">
+                <p style="font-size: 0.85rem; color: var(--text-muted); font-style: italic;">Aucune preuve marquée dans les modules. Allez dans la Timeline ou l'Analyseur de Bases de Données pour ajouter des indices avec le bouton de marquage.</p>
+              </div>
+            </div>
+            
+            <!-- MITRE MAPPING -->
+            <div style="margin-bottom: 24px;">
+              <h3 style="font-size: 0.95rem; text-transform: uppercase; color: var(--color-danger); font-weight: 700; margin-bottom: 8px;">3. Cartographie des Techniques d'Attaque (MITRE ATT&CK Mobile)</h3>
+              <div id="print-mitre-list" style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; font-size: 0.8rem;">
+                <!-- Mitre list -->
+              </div>
+            </div>
+            
+            <!-- Sign-off block -->
+            <div style="margin-top: 40px; display: flex; justify-content: space-between; align-items: flex-end; border-top: 1px dashed var(--border-color); padding-top: 24px;">
+              <div style="font-size: 0.75rem; color: var(--text-muted);">
+                Empreinte d'intégrité logicielle AegisDroid Suite v1.0.0<br>
+                Rapport d'investigation numérique certifié.
+              </div>
+              <div style="text-align: right; width: 200px;">
+                <span style="font-size: 0.75rem; text-transform: uppercase; color: var(--text-muted); display: block; margin-bottom: 40px;">Signature de l'Investigateur</span>
+                <span style="border-bottom: 1px solid var(--text-secondary); width: 100%; display: inline-block;"></span>
+              </div>
+            </div>
+            
+          </div>
+        </div>
+      </div>
+      
+      <!-- ==========================================
+           G. PANEL: HANDBOOK & REFERENCE MANUAL
+           ========================================== -->
+      <div id="handbook-panel" class="section-panel">
+        <div class="section-header">
+          <div class="section-title">
+            <h2>Manuel Forensique Android</h2>
+            <p>Guide théorique et pratique complet pour l'investigation numérique sur terminaux mobiles compromis.</p>
+          </div>
+        </div>
+        
+        <div class="forensic-grid">
+          <div class="col-12 handbook-toc" id="handbook-toc-container">
+            <!-- Dynamically populated collapsible handbooks -->
+          </div>
+        </div>
+      </div>
+      
+    </div>
+  </div>
+
+  <!-- 3. DIALOG MODAL: TAG EVIDENCE NOTES -->
+  <div class="forensic-modal" id="evidence-modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3>Marquer comme Pièce à Conviction</h3>
+        <button class="modal-close" id="btn-close-modal">✕</button>
+      </div>
+      
+      <div class="form-group">
+        <label>Type d'Indice / Tag Forensique</label>
+        <input type="text" class="form-input" id="modal-evidence-tag" readonly>
+      </div>
+      
+      <div class="form-group">
+        <label>Donnée brute de l'Artifact</label>
+        <textarea class="form-input" id="modal-evidence-raw" style="height: 60px; font-family: var(--font-mono); font-size: 0.75rem;" readonly></textarea>
+      </div>
+      
+      <div class="form-group">
+        <label>Notes de l'Analyste (Pourquoi est-ce suspect ?)</label>
+        <textarea class="form-input" id="modal-evidence-notes" placeholder="Notez ici les arguments forensiques, les suspicions de malware, le vecteur d'attaque, etc." style="height: 100px;"></textarea>
+      </div>
+      
+      <div style="display: flex; justify-content: flex-end; gap: 10px; margin-top: 10px;">
+        <button class="btn-outline" id="btn-cancel-modal">Annuler</button>
+        <button class="btn-primary" id="btn-save-modal">Enregistrer l'Indice</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Load SQLite SQL.js CDN parser (wasm) -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/sql.js/1.6.2/sql-wasm.js" onerror="console.warn('sql.js failed to load from CDN. Using custom JS SQL engine polyfill.')"></script>
+
+  <!-- Load Structured Local JS Databases -->
+  <script src="cases.js"></script>
+  <script src="documentation.js"></script>
+  <!-- Load Main Application Logic -->
+  <script src="app.js"></script>
+
+</body>
+</html>
